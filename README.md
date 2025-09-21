@@ -194,3 +194,14 @@ volumes:
   mongodata:
 ```
 > ในโค้ด .NET ให้ใช้ host เป็นชื่อ service (mysql, mongo) แทน localhost เพราะอยู่ใน network เดียวกันของ compose
+
+## 9) .dockerignore
+เพื่อไม่ให้ `bin/ obj/ .git` เข้าไปใน context แล้วทำให้ build ช้า/แคชพัง
+```
+bin/
+obj/
+.git/
+.gitignore
+**/*.user
+**/*.swp
+```
