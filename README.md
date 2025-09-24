@@ -124,6 +124,10 @@ docker compose up --build
 # กด Ctrl+C เพื่อหยุด
 # ถ้าจะรันฉากหลัง:
 docker compose up -d --build
+#ใช้ -f เพื่อบอก Compose ว่าจะใช้ไฟล์ไหน
+docker compose -f docker-compose.debug.yml up
+#หรือถ้าอยาก build ใหม่ด้วย:
+docker compose -f docker-compose.debug.yml up --build
 # ปิดและลบคอนเทนเนอร์ (ไม่ลบ volume)
 docker compose down
 ```
