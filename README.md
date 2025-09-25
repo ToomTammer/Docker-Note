@@ -169,7 +169,7 @@ Compose
 * `environment` ตั้งค่าคอนฟิก
 * `volumes` เก็บข้อมูลถาวร
 
-## 8) ถ้าคุณใช้ MySQL/MongoDB อยู่แล้ว (ตัวอย่าง Compose สั้นๆ)
+## 8) ถ้าคุณใช้ MySQL/MongoDB/mssql อยู่แล้ว (ตัวอย่าง Compose สั้นๆ)
 ```
 services:
   web:
@@ -193,11 +193,30 @@ services:
     volumes:
       - mongodata:/data/db
 
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${SA_PASSWORD:-YourStrong!Passw0rd}
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssqldata:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -C -U sa -P \"$MSSQL_SA_PASSWORD\" -Q \"SELECT 1\" || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
 volumes:
   mysqldata:
   mongodata:
+  mssqldata:
 ```
 > ในโค้ด .NET ให้ใช้ host เป็นชื่อ service (mysql, mongo) แทน localhost เพราะอยู่ใน network เดียวกันของ compose
+> localhost, [port]
 
 ## 9) .dockerignore
 เพื่อไม่ให้ `bin/ obj/ .git` เข้าไปใน context แล้วทำให้ build ช้า/แคชพัง
@@ -209,3 +228,5 @@ obj/
 **/*.user
 **/*.swp
 ```
+
+
